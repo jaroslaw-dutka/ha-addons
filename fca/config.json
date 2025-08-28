@@ -1,0 +1,54 @@
+{
+  "name": "FCA Assistant",
+  "url": "https://github.com/jaroslaw-dutka/ha-fca",
+  "version": "0.0.1",
+  "description": "Connect your FCA car to Home Assistant.",
+  "image": "ghcr.io/jaroslaw-dutka/ha-fca-{arch}",
+  "arch": [
+    "amd64",
+    "armv7"
+  ],
+  "slug": "fca-assistant",
+  "init": false,
+  "homeassistant_api": true,
+  "services": [
+    "mqtt:want"
+  ],
+  "discovery": [
+    "mqtt"
+  ],
+  "schema": {
+    "Username": "str",
+    "Password": "password",
+    "Pin": "password?",
+    "Brand": "list(Fiat|Ram|Jeep|Dodge|AlfaRomeo)",
+    "Region": "list(Europe|America)",
+    "Unit": "list(Kilometers|Miles)",
+    "Loglevel": "list(Debug|Information|Warning|Error)",
+    "RefreshInterval": "int",
+    "AutoRefreshBattery": "bool",
+    "AutoRefreshLocation": "bool",
+    "EnableDangerousCommands": "bool",
+    "CarUnknownLocation": "str",
+    "StartDelaySeconds": "int?",
+    "OverrideMqttUser": "str?",
+    "OverrideMqttPass": "password?",
+    "OverrideMqttServer": "str?",
+    "OverrideMqttPort": "int?"
+  },
+  "options": {
+    "Username": "",
+    "Password": "",
+    "Pin": "",
+    "Brand": "Fiat",
+    "Region": "Europe",
+    "Unit": "Kilometers",
+    "Loglevel": "Information",
+    "RefreshInterval": 15,
+    "AutoRefreshBattery": false,
+    "AutoRefreshLocation": false,
+    "EnableDangerousCommands": false,
+    "CarUnknownLocation": "away",
+    "StartDelaySeconds": 1
+  }
+}
