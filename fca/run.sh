@@ -1,37 +1,35 @@
 #!/usr/bin/with-contenv bashio
 
 if [ -z ${STANDALONE+x} ]; then
-  export FiatChamp_MqttUser=$(bashio::config 'OverrideMqttUser')
-  export FiatChamp_MqttPw=$(bashio::config 'OverrideMqttPw')
-  export FiatChamp_MqttServer=$(bashio::config 'OverrideMqttServer')
-  export FiatChamp_MqttPort=$(bashio::config 'OverrideMqttPort')
+  export FcaAssistant_fca__user=$(bashio::config 'Username')
+  export FcaAssistant_fca__password=$(bashio::config 'Password')
+  export FcaAssistant_fca__pin=$(bashio::config 'Pin')
+  export FcaAssistant_fca__brand=$(bashio::config 'Brand')
+  export FcaAssistant_fca__region=$(bashio::config 'Region')
+
+  export FcaAssistant_app__unit=$(bashio::config 'DistanceUnit')
+  export FcaAssistant_app__startDelaySeconds=$(bashio::config 'StartDelaySeconds')
+  export FcaAssistant_app__refreshInterval=$(bashio::config 'RefreshInterval')
+  export FcaAssistant_app__autoRefreshLocation=$(bashio::config 'AutoRefreshLocation')
+  export FcaAssistant_app__autoRefreshBattery=$(bashio::config 'AutoRefreshBattery')
+  export FcaAssistant_app__enableDangerousCommands=$(bashio::config 'EnableDangerousCommands')
+  export FcaAssistant_app__carUnknownLocation=$(bashio::config 'CarUnknownLocation')
+
+  export FcaAssistant_serilog__MinimumLevel=$(bashio::config 'Loglevel')
+
+  export FcaAssistant_ha__api__token=$SUPERVISOR_TOKEN
+  export FcaAssistant_ha__mqtt_server=$(bashio::config 'OverrideMqttServer')
+  export FcaAssistant_ha__mqtt_port=$(bashio::config 'OverrideMqttPort')
+  export FcaAssistant_ha__mqtt_user=$(bashio::config 'OverrideMqttUser')
+  export FcaAssistant_ha__mqtt_password=$(bashio::config 'OverrideMqttPw')
   
-  test "$FiatChamp_MqttUser" = "null" && export FiatChamp_MqttUser=$(bashio::services "mqtt" "username")
-  test "$FiatChamp_MqttPw" = "null" && export FiatChamp_MqttPw=$(bashio::services "mqtt" "password")
-  test "$FiatChamp_MqttServer" = "null" && export FiatChamp_MqttServer=$(bashio::services "mqtt" "host")
-  test "$FiatChamp_MqttPort" = "null" && export FiatChamp_MqttPort=$(bashio::services "mqtt" "port")
-  
-  export FiatChamp_CarUnknownLocation=$(bashio::config 'CarUnknownLocation')
-  export FiatChamp_Brand=$(bashio::config 'Brand')
-  export FiatChamp_Region=$(bashio::config 'Region')
-  export FiatChamp_StartDelaySeconds=$(bashio::config 'StartDelaySeconds')
-  
-  export FiatChamp_SupervisorToken=$SUPERVISOR_TOKEN
-  
-  export FiatChamp_FiatUser=$(bashio::config 'FiatUser')
-  export FiatChamp_FiatPw=$(bashio::config 'FiatPw')
-  export FiatChamp_FiatPin=$(bashio::config 'FiatPin')
-  
-  export FiatChamp_ConvertKmToMiles=$(bashio::config 'ConvertKmToMiles')
-  
-  export FiatChamp_AutoRefreshLocation=$(bashio::config 'AutoRefreshLocation')
-  export FiatChamp_AutoRefreshBattery=$(bashio::config 'AutoRefreshBattery')
-  export FiatChamp_EnableDangerousCommands=$(bashio::config 'EnableDangerousCommands')
-  
-  export FiatChamp_Debug=$(bashio::config 'Debug')
+  test "$FcaAssistant_ha__mqtt_server" = "null" && export FcaAssistant_ha__mqtt_server=$(bashio::services "mqtt" "host")
+  test "$FcaAssistant_ha__mqtt_port" = "null" && export FcaAssistant_ha__mqtt_port=$(bashio::services "mqtt" "port")
+  test "$FcaAssistant_ha__mqtt_user" = "null" && export FcaAssistant_ha__mqtt_user=$(bashio::services "mqtt" "username")
+  test "$FcaAssistant_ha__mqtt_password" = "null" && export FcaAssistant_ha__mqtt_password=$(bashio::services "mqtt" "password")
 else
   echo "RUNNING IN STANDALONE MODE"
 fi
 
-cd /build/
-./FiatChamp
+cd /app
+./FcaAssistant
