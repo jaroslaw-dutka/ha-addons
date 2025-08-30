@@ -19,6 +19,7 @@ if [ -z ${STANDALONE+x} ]; then
 
   export FcaAssistant_serilog__MinimumLevel=$(bashio::config 'Loglevel')
 
+  export FcaAssistant_ha__api__url=http://supervisor/core/api
   export FcaAssistant_ha__api__token=$SUPERVISOR_TOKEN
   export FcaAssistant_ha__mqtt__server=$(bashio::config 'OverrideMqttServer')
   export FcaAssistant_ha__mqtt__port=$(bashio::config 'OverrideMqttPort')

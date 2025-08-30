@@ -1,7 +1,7 @@
 {
   "name": "FCA Assistant",
   "url": "https://github.com/jaroslaw-dutka/ha-fca",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Connect your FCA car to Home Assistant.",
   "_image": "ghcr.io/jaroslaw-dutka/ha-fca-{arch}",
   "arch": [
