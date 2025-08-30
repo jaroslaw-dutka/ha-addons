@@ -32,11 +32,11 @@
     "EnableDangerousCommands": "bool",
     "CarUnknownLocation": "str",
 
-    "OverrideMqttUser": "str?",
-    "OverrideMqttPass": "password?",
     "OverrideMqttServer": "str?",
     "OverrideMqttPort": "int?",
-
+    "OverrideMqttUser": "str?",
+    "OverrideMqttPass": "password?",
+ 
     "Loglevel": "list(Debug|Information|Warning|Error)"
   },
   "options": {

@@ -1,6 +1,8 @@
 #!/usr/bin/with-contenv bashio
 
 if [ -z ${STANDALONE+x} ]; then
+  echo "RUNNING IN HOMEASSISTANT MODE"
+
   export FcaAssistant_fca__user=$(bashio::config 'Username')
   export FcaAssistant_fca__password=$(bashio::config 'Password')
   export FcaAssistant_fca__pin=$(bashio::config 'Pin')
@@ -18,15 +20,15 @@ if [ -z ${STANDALONE+x} ]; then
   export FcaAssistant_serilog__MinimumLevel=$(bashio::config 'Loglevel')
 
   export FcaAssistant_ha__api__token=$SUPERVISOR_TOKEN
-  export FcaAssistant_ha__mqtt_server=$(bashio::config 'OverrideMqttServer')
-  export FcaAssistant_ha__mqtt_port=$(bashio::config 'OverrideMqttPort')
-  export FcaAssistant_ha__mqtt_user=$(bashio::config 'OverrideMqttUser')
-  export FcaAssistant_ha__mqtt_password=$(bashio::config 'OverrideMqttPw')
-  
-  test "$FcaAssistant_ha__mqtt_server" = "null" && export FcaAssistant_ha__mqtt_server=$(bashio::services "mqtt" "host")
-  test "$FcaAssistant_ha__mqtt_port" = "null" && export FcaAssistant_ha__mqtt_port=$(bashio::services "mqtt" "port")
-  test "$FcaAssistant_ha__mqtt_user" = "null" && export FcaAssistant_ha__mqtt_user=$(bashio::services "mqtt" "username")
-  test "$FcaAssistant_ha__mqtt_password" = "null" && export FcaAssistant_ha__mqtt_password=$(bashio::services "mqtt" "password")
+  export FcaAssistant_ha__mqtt__server=$(bashio::config 'OverrideMqttServer')
+  export FcaAssistant_ha__mqtt__port=$(bashio::config 'OverrideMqttPort')
+  export FcaAssistant_ha__mqtt__user=$(bashio::config 'OverrideMqttUser')
+  export FcaAssistant_ha__mqtt__password=$(bashio::config 'OverrideMqttPass')
+
+  test "$FcaAssistant_ha__mqtt__server" = "null" && export FcaAssistant_ha__mqtt__server=$(bashio::services "mqtt" "host")
+  test "$FcaAssistant_ha__mqtt__port" = "null" && export FcaAssistant_ha__mqtt__port=$(bashio::services "mqtt" "port")
+  test "$FcaAssistant_ha__mqtt__user" = "null" && export FcaAssistant_ha__mqtt__user=$(bashio::services "mqtt" "username")
+  test "$FcaAssistant_ha__mqtt__password" = "null" && export FcaAssistant_ha__mqtt__password=$(bashio::services "mqtt" "password")
 else
   echo "RUNNING IN STANDALONE MODE"
 fi
