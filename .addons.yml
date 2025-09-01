@@ -3,3 +3,4 @@ addons:
   fca:
     repository: jaroslaw-dutka/ha-fca
     target: fca
+    image:
