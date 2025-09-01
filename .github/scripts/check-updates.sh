@@ -99,9 +99,9 @@ for addon_dir in "${ADDON_DIRS[@]}"; do
   echo "📦 Found $RELEASE_COUNT new release(s) since $CURRENT_VERSION"
 
   # Update config.json
-  # echo "📝 Updating config.json..."
-  # jq ".version = \"$LATEST_VERSION\"" "${addon_dir}config.json" > "${addon_dir}config.json.tmp"
-  # mv "${addon_dir}config.json.tmp" "${addon_dir}config.json"
+  echo "📝 Updating config.json..."
+  jq ".version = \"$LATEST_VERSION\"" "${addon_dir}config.json" > "${addon_dir}config.json.tmp"
+  mv "${addon_dir}config.json.tmp" "${addon_dir}config.json"
 
   # Update CHANGELOG.md if it exists
   if [[ -f "${addon_dir}CHANGELOG.md" ]]; then
