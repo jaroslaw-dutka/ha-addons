@@ -1,0 +1,22 @@
+#!/bin/bash
+set -e
+
+ADDON_DIR="$1"
+REPO_PATH="$2"
+NEW_RELEASES="$3"
+
+# Create temporary file with new changelog entries
+TEMP_CHANGELOG=$(mktemp)
+
+echo "$NEW_RELEASES" | jq -r 'sort_by(.published_at) | reverse | .[] | .body | sub("^[[:space:]]+"; "") | sub("[[:space:]]+$"; "") | "\(.)\r\n" ' >> "$TEMP_CHANGELOG"
+
+# Combine new entries with existing changelog
+{
+  cat "$TEMP_CHANGELOG"
+  if [[ -f "${ADDON_DIR}CHANGELOG.md" ]]; then
+    cat "${ADDON_DIR}CHANGELOG.md"
+  fi
+} > "${ADDON_DIR}CHANGELOG.md.tmp"
+
+mv "${ADDON_DIR}CHANGELOG.md.tmp" "${ADDON_DIR}CHANGELOG.md"
+rm -f "$TEMP_CHANGELOG"
