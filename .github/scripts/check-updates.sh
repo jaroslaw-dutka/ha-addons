@@ -61,7 +61,7 @@ for addon_dir in "${ADDON_DIRS[@]}"; do
   echo "🆕 Latest version: $LATEST_VERSION"
 
   # Compare versions using semver
-  if ! npx semver "$LATEST_VERSION" -r ">$CURRENT_VERSION" 2>/dev/null; then
+  if ! npx semver "$LATEST_VERSION" -r ">$CURRENT_VERSION" >/dev/null 2>&1; then
     echo "✅ $addon_name is up to date ($CURRENT_VERSION)"
     continue
   fi
