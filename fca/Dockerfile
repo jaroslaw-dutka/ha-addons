@@ -1,6 +1,4 @@
-ARG BUILD_FROM
-
-FROM $BUILD_FROM
+FROM ghcr.io/home-assistant/base:3.24
 
 ARG BUILD_VERSION
 ARG BUILD_ARCH
