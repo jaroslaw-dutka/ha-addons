@@ -1,3 +1,10 @@
+## [0.0.5](https://github.com/jaroslaw-dutka/ha-fca/compare/v0.0.4...v0.0.5) (2026-08-05)
+
+
+### Bug Fixes
+
+* switches ([5600caa](https://github.com/jaroslaw-dutka/ha-fca/commit/5600caa982b85ee409fea719ddbec251fbe45131))
+
 ## [0.0.4](https://github.com/jaroslaw-dutka/ha-fca/compare/v0.0.3...v0.0.4) (2026-08-03)
 
 
