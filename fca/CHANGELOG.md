@@ -1,3 +1,10 @@
+## [0.0.7](https://github.com/jaroslaw-dutka/ha-fca/compare/v0.0.6...v0.0.7) (2026-08-06)
+
+
+### Bug Fixes
+
+* logging ([7c89b60](https://github.com/jaroslaw-dutka/ha-fca/commit/7c89b60db96d5759dc4523fb00ded8261fad68be))
+
 ## [0.0.6](https://github.com/jaroslaw-dutka/ha-fca/compare/v0.0.5...v0.0.6) (2026-08-06)
 
 
