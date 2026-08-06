@@ -1,3 +1,10 @@
+# [0.1.0](https://github.com/jaroslaw-dutka/ha-fca/compare/v0.0.6...v0.1.0) (2026-08-06)
+
+
+### Features
+
+* debug logging ([abafeb3](https://github.com/jaroslaw-dutka/ha-fca/commit/abafeb3ec63affeed320c00ebfab66a177e649e5))
+
 ## [0.0.6](https://github.com/jaroslaw-dutka/ha-fca/compare/v0.0.5...v0.0.6) (2026-08-06)
 
 
