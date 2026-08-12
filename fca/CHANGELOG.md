@@ -1,3 +1,10 @@
+## [0.0.8](https://github.com/jaroslaw-dutka/ha-fca/compare/v0.0.7...v0.0.8) (2026-08-12)
+
+
+### Bug Fixes
+
+* unit tests ([d994ced](https://github.com/jaroslaw-dutka/ha-fca/commit/d994ced2ee0c48555bdef39a16057ca03039b699))
+
 ## [0.0.7](https://github.com/jaroslaw-dutka/ha-fca/compare/v0.0.6...v0.0.7) (2026-08-06)
 
 
