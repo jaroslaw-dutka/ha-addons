@@ -8,13 +8,13 @@ if [ -z ${STANDALONE+x} ]; then
   export FcaAssistant_fca__pin=$(bashio::config 'Pin')
   export FcaAssistant_fca__brand=$(bashio::config 'Brand')
   export FcaAssistant_fca__region=$(bashio::config 'Region')
+  export FcaAssistant_fca__enableDangerousCommands=$(bashio::config 'EnableDangerousCommands')
 
   export FcaAssistant_app__unit=$(bashio::config 'DistanceUnit')
   export FcaAssistant_app__startDelaySeconds=$(bashio::config 'StartDelaySeconds')
   export FcaAssistant_app__refreshInterval=$(bashio::config 'RefreshInterval')
   export FcaAssistant_app__autoRefreshLocation=$(bashio::config 'AutoRefreshLocation')
   export FcaAssistant_app__autoRefreshBattery=$(bashio::config 'AutoRefreshBattery')
-  export FcaAssistant_app__enableDangerousCommands=$(bashio::config 'EnableDangerousCommands')
   export FcaAssistant_app__carUnknownLocation=$(bashio::config 'CarUnknownLocation')
 
   export FcaAssistant_serilog__MinimumLevel=$(bashio::config 'Loglevel')
