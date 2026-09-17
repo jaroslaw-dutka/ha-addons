@@ -1,0 +1,55 @@
+{
+  "name": "Assist Satellite for XVF3800",
+  "url": "https://github.com/imonlinux/linux-voice-assistant",
+  "version": "1.1.0",
+  "description": "Turn HA host into a voice assistant with a connected ReSpeaker XVF3800",
+  "arch": [
+    "amd64",
+    "aarch64"
+  ],
+  "slug": "assist-satellite-xvf3800",
+  "startup": "application",
+  "boot": "auto",
+  "init": false,
+  "host_network": true,
+  "audio": true,
+  "usb": true,
+  "udev": true,
+  "services": [
+    "mqtt:want"
+  ],
+  "schema": {
+    "name": "str",
+    "wake_word": "str",
+    "wake_word_threshold": "float(0,1)",
+    "event_sounds_enabled": "bool",
+    "listen_during_wake_sound": "bool",
+    "volume_sync": "bool",
+    "max_volume_percent": "int(1,300)",
+    "led_enabled": "bool",
+    "button_enabled": "bool",
+    "xvf3800_startup_reboot": "bool",
+    "esphome_port": "port",
+    "mqtt_enabled": "bool",
+    "mqtt_host": "str?",
+    "mqtt_port": "port?",
+    "mqtt_username": "str?",
+    "mqtt_password": "password?",
+    "debug": "bool"
+  },
+  "options": {
+    "name": "Linux Voice Assistant",
+    "wake_word": "okay_nabu",
+    "wake_word_threshold": 0.5,
+    "event_sounds_enabled": true,
+    "listen_during_wake_sound": true,
+    "volume_sync": true,
+    "max_volume_percent": 100,
+    "led_enabled": true,
+    "button_enabled": true,
+    "xvf3800_startup_reboot": false,
+    "esphome_port": 6053,
+    "mqtt_enabled": true,
+    "debug": false
+  }
+}
