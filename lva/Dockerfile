@@ -7,10 +7,12 @@ ARG LVA_REF=4c67ec4f335e375f9e45ba1ab7f4d7c36ac94f51
 
 # Audio goes through the HA audio plugin (PulseAudio). libmpv also probes PipeWire,
 # which logs missing client.conf errors, so force pulse and silence libpipewire.
+# XVF3800 reboot on startup breaks USB detection (no hotplug inside the container).
 ENV DEBIAN_FRONTEND=noninteractive \
     PYTHONUNBUFFERED=1 \
     LVA_AO=pulse \
-    PIPEWIRE_DEBUG=0
+    PIPEWIRE_DEBUG=0 \
+    LVA_XVF3800_STARTUP_REBOOT=0
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
         ca-certificates git tini jq curl \

@@ -14,8 +14,13 @@ on the Home Assistant host with a ReSpeaker XVF3800 connected over USB.
 
 ## Audio
 
-Audio goes through the Home Assistant audio plugin. In the add-on **Audio**
-section select the XVF3800 explicitly as input and output (not "Default").
+Audio goes through the Home Assistant audio plugin. The add-on picks the
+XVF3800 source and sink automatically, the **Audio** section is not used.
+
+All voice processing (echo cancellation, noise suppression, gain, beamforming)
+is done by the XVF3800 DSP. No software processing is applied: the source
+volume is set to 100% (0 dB, samples unchanged) and Home Assistant receives
+audio with noise suppression and auto gain disabled.
 
 ## Data
 

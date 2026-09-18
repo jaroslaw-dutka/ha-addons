@@ -41,13 +41,9 @@ fi
 mkdir -p /tmp/lva /data/wakewords
 jq -n \
   --arg name "$(opt name)" \
-  --argjson event_sounds "$(opt event_sounds_enabled)" \
   --argjson listen_during_wake "$(opt listen_during_wake_sound)" \
   --argjson debug "$(opt debug)" \
-  --argjson volume_sync "$(opt volume_sync)" \
   --argjson max_volume "$(opt max_volume_percent)" \
-  --arg wake_word "$(opt wake_word)" \
-  --argjson threshold "$(opt wake_word_threshold)" \
   --argjson esphome_port "$(opt esphome_port)" \
   --argjson led "$(opt led_enabled)" \
   --argjson button "$(opt button_enabled)" \
@@ -58,18 +54,15 @@ jq -n \
   '{
     app: {
       name: $name,
-      event_sounds_enabled: $event_sounds,
       listen_during_wake_sound: $listen_during_wake,
       preferences_file: "/data/preferences.json",
       debug: $debug
     },
     audio: {
-      volume_sync: $volume_sync,
+      volume_sync: true,
       max_volume_percent: $max_volume
     },
     wake_word: {
-      model: $wake_word,
-      openwakeword_threshold: $threshold,
       download_dir: "/data/wakewords"
     },
     esphome: {
@@ -91,19 +84,83 @@ jq -n \
       username: (if $mqtt_user == "" then null else $mqtt_user end),
       password: (if $mqtt_pass == "" then null else $mqtt_pass end)
     }
-  }' > "$CONFIG"
+  }' > "$CONFIG.base"
 
-# Board reboot on startup breaks USB detection (no hotplug inside the container)
-if [ "$(opt xvf3800_startup_reboot)" = "true" ]; then
-  export LVA_XVF3800_STARTUP_REBOOT=1
-else
-  export LVA_XVF3800_STARTUP_REBOOT=0
-fi
+# --- XVF3800 supervision ----------------------------------------------------
+# LED/button controllers keep a USB handle that goes stale when the board is
+# re-plugged, and the board loses its runtime config, so LVA is restarted then.
+USB_DEVICES=${USB_DEVICES:-/sys/bus/usb/devices}
 
-# --- Audio ------------------------------------------------------------------
-# Devices come from the HA audio plugin, selected in the add-on "Audio" section
-pactl list short sources || true
-pactl list short sinks || true
+# Prints "<bus>:<dev>" of the XVF3800 - changes on every re-plug
+xvf_usb_id() {
+  local d
+  for d in "$USB_DEVICES"/*; do
+    if [ "$(cat "$d/idVendor" 2>/dev/null)" = "2886" ] \
+      && [ "$(cat "$d/idProduct" 2>/dev/null)" = "001a" ]; then
+      echo "$(cat "$d/busnum"):$(cat "$d/devnum")"
+      return
+    fi
+  done
+}
+
+xvf_ready() {
+  [ -n "$(xvf_usb_id)" ] && pactl list short sources 2>/dev/null | grep -q 'alsa_input.*XVF3800'
+}
+
+stop_lva() {
+  kill -TERM "$LVA_PID" 2>/dev/null || true
+  for _ in $(seq 20); do
+    kill -0 "$LVA_PID" 2>/dev/null || break
+    sleep 0.5
+  done
+  kill -KILL "$LVA_PID" 2>/dev/null || true
+  wait "$LVA_PID" 2>/dev/null || true
+}
+
+LVA_PID=""
+trap '[ -n "$LVA_PID" ] && stop_lva; exit 0' TERM INT
 
 cd /opt/lva
-exec .venv/bin/python -m linux_voice_assistant -c "$CONFIG"
+while true; do
+  if ! xvf_ready; then
+    echo "Waiting for XVF3800 (USB device and HA audio source)..."
+    until xvf_ready; do
+      sleep 1
+    done
+    sleep 2
+  fi
+  USB_ID=$(xvf_usb_id)
+
+  pactl list short sources || true
+  pactl list short sinks || true
+
+  # Use the XVF3800 directly instead of the plugin default from the Audio section
+  IN_DEV=$(pactl list short sources | awk '$2 ~ /^alsa_input\..*XVF3800/ { print $2; exit }')
+  OUT_DEV=$(pactl list short sinks | awk '$2 ~ /^alsa_output\..*XVF3800/ { print $2; exit }')
+  echo "Input: ${IN_DEV:-default}, output: ${OUT_DEV:-default}"
+  jq --arg in "$IN_DEV" --arg out "$OUT_DEV" '
+    .audio.input_device = (if $in == "" then null else $in end)
+    | .audio.output_device = (if $out == "" then null else "pulse/" + $out end)
+  ' "$CONFIG.base" > "$CONFIG"
+
+  # 100% = 0 dB: PulseAudio passes samples unchanged (XVF3800 does AEC/NS/AGC in hardware)
+  pactl set-source-volume "${IN_DEV:-@DEFAULT_SOURCE@}" 100% \
+    || echo "WARNING: failed to set microphone volume" >&2
+
+  .venv/bin/python -m linux_voice_assistant -c "$CONFIG" &
+  LVA_PID=$!
+
+  while kill -0 "$LVA_PID" 2>/dev/null; do
+    if [ "$(xvf_usb_id)" != "$USB_ID" ]; then
+      echo "XVF3800 USB device changed ($USB_ID -> $(xvf_usb_id)), restarting LVA"
+      stop_lva
+      continue 2
+    fi
+    sleep 2
+  done
+
+  # LVA exited on its own - let the Supervisor handle it
+  wait "$LVA_PID" && RC=0 || RC=$?
+  echo "LVA exited with code $RC"
+  exit "$RC"
+done

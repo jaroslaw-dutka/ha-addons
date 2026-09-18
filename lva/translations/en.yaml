@@ -2,21 +2,9 @@ configuration:
   name:
     name: Device name
     description: Name of the satellite shown in Home Assistant.
-  wake_word:
-    name: Wake word
-    description: Default wake word model id (can be changed later from Home Assistant).
-  wake_word_threshold:
-    name: openWakeWord threshold
-    description: Activation threshold for openWakeWord models (0.0 - 1.0).
-  event_sounds_enabled:
-    name: Event sounds
-    description: Play wakeup and thinking sounds. Timer alarm always plays.
   listen_during_wake_sound:
     name: Listen during wake sound
     description: Start streaming audio while the wakeup sound is still playing.
-  volume_sync:
-    name: Volume sync
-    description: Set the output sink volume to the saved volume at startup.
   max_volume_percent:
     name: Max volume percent
     description: Sink volume mapped to 100% of the media player volume.
@@ -26,15 +14,12 @@ configuration:
   button_enabled:
     name: Mute button
     description: Use the XVF3800 mute button as the microphone mute toggle.
-  xvf3800_startup_reboot:
-    name: Reboot XVF3800 on start
-    description: Reboot the board on start. Usually breaks USB detection inside the container.
   esphome_port:
     name: ESPHome API port
     description: Port of the ESPHome API used by Home Assistant to connect to the satellite.
   mqtt_enabled:
     name: MQTT
-    description: Publish LED, sound and mute entities via MQTT discovery.
+    description: Publish LED ring effect and color entities via MQTT discovery.
   mqtt_host:
     name: MQTT host
     description: Leave empty to use the broker provided by the Mosquitto add-on.
