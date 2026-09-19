@@ -30,6 +30,11 @@ for addon_dir in "${ADDON_DIRS[@]}"; do
   echo ""
   echo "🔍 Processing addon: $addon_name"
 
+  if [[ " ${EXCLUDED_ADDONS:-} " == *" $addon_name "* ]]; then
+    echo "⏭️  $addon_name is excluded, skipping..."
+    continue
+  fi
+
   # Read current version and URL from config.json
   CURRENT_VERSION=$(jq -r '.version' "${addon_dir}config.json")
   REPO_URL=$(jq -r '.url' "${addon_dir}config.json")

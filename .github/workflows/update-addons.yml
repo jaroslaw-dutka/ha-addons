@@ -32,6 +32,9 @@ jobs:
         id: check-updates
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Space-separated addon directories versioned manually
+          # lva: pinned to a fork commit, its upstream releases don't match the add-on version
+          EXCLUDED_ADDONS: lva
         run: .github/scripts/check-updates.sh
 
       - name: Create Pull Request
