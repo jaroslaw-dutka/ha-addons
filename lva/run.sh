@@ -120,6 +120,9 @@ stop_lva() {
 LVA_PID=""
 trap '[ -n "$LVA_PID" ] && stop_lva; exit 0' TERM INT
 
+# reSpeaker Console (HA ingress panel), independent of LVA restarts
+(cd /opt/console && exec /opt/lva/.venv/bin/python server.py) &
+
 cd /opt/lva
 while true; do
   if ! xvf_ready; then

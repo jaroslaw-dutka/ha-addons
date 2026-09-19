@@ -22,6 +22,21 @@ is done by the XVF3800 DSP. No software processing is applied: the source
 volume is set to 100% (0 dB, samples unchanged) and Home Assistant receives
 audio with noise suppression and auto gain disabled.
 
+## reSpeaker Console
+
+The **reSpeaker** sidebar panel is a web build of
+[reSpeaker Console](https://github.com/respeaker/respeaker-console) for tuning
+the XVF3800 DSP: live monitoring (direction of arrival, voice activity, AEC),
+audio and LED controls and the full parameter catalog with export/import.
+
+- Changes are live and lost when the board reboots or is re-plugged. Use
+  **Save to Flash** in the parameter catalog to keep them.
+- Linux Voice Assistant routes the processed ASR beam to both USB channels
+  (`AUDIO_MGR_OP_L`/`AUDIO_MGR_OP_R` = `7, 3`) and drives the LED ring, so it
+  overrides those settings on every start.
+- Rebooting the board from the console restarts Linux Voice Assistant.
+- Firmware flashing (DFU) is not available in the add-on.
+
 ## Data
 
 Preferences (volume, selected sounds, stable MAC address) and downloaded wake

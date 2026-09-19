@@ -1,3 +1,27 @@
+# --- reSpeaker Console web build ---------------------------------------------
+# Desktop (Tauri) app built for the browser: Tauri APIs are replaced with shims
+# talking to console/server.py, upstream sources stay unmodified.
+FROM node:22-slim AS console
+
+ARG CONSOLE_REPO=https://github.com/respeaker/respeaker-console.git
+ARG CONSOLE_REF=261578dcc0abb2e70f385d856cfc9b9abe4051ce
+
+RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates git \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN git init -q /src \
+    && cd /src \
+    && git remote add origin "${CONSOLE_REPO}" \
+    && git fetch -q --depth 1 origin "${CONSOLE_REF}" \
+    && git checkout -q FETCH_HEAD
+
+WORKDIR /src
+RUN npm install -g pnpm@9 && pnpm install --frozen-lockfile
+
+COPY console/vite.config.ts console/tauri.ts ha/
+RUN pnpm exec vite build --config ha/vite.config.ts
+
+# --- Add-on ------------------------------------------------------------------
 FROM debian:trixie-slim
 
 # Fork has no own releases (its v1.1.0 tag mirrors upstream without MQTT/XVF3800),
@@ -61,6 +85,10 @@ RUN script/setup \
     && apt-get purge -y build-essential python3-dev \
     && apt-get autoremove -y \
     && rm -rf /var/lib/apt/lists/* /root/.cache
+
+COPY console/*.py /opt/console/
+COPY --from=console /src/dist-ha /opt/console/www
+COPY --from=console /src/src-tauri/src/xvf/parameters.rs /opt/console/
 
 COPY run.sh /run.sh
 RUN chmod a+x /run.sh

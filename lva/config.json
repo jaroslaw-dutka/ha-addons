@@ -1,7 +1,7 @@
 {
   "name": "Assist Satellite for XVF3800",
   "url": "https://github.com/imonlinux/linux-voice-assistant",
-  "version": "1.1.0",
+  "version": "1.0.0",
   "description": "Turn HA host into a voice assistant with a connected ReSpeaker XVF3800",
   "arch": [
     "amd64",
@@ -15,6 +15,10 @@
   "audio": true,
   "usb": true,
   "udev": true,
+  "ingress": true,
+  "ingress_port": 8538,
+  "panel_icon": "mdi:microphone-settings",
+  "panel_title": "reSpeaker",
   "services": [
     "mqtt:want"
   ],
